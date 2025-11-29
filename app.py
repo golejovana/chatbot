@@ -27,8 +27,79 @@ FAQ = [
         "question": "Da li se knjige mogu iznositi iz čitaonice?",
         "answer": "Knjige se u pravilu ne iznose iz čitaonice, osim u slučaju kada je to posebno naznačeno.",
         "keywords": ["knjige", "iznositi", "poneti", "iznosi", "pozajmica", "pozajmljivanje"]
+    },
+
+    # 5) Učlanjenje
+    {
+        "question": "Kako da postanem član čitaonice?",
+        "answer": "Član čitaonice možeš postati popunjavanjem pristupnice na info-pultu uz indeks ili ličnu kartu.",
+        "keywords": ["uclanjenje", "učlanjenje", "postanem član", "postati clan", "pristupnica"]
+    },
+
+    # 6) Wi-Fi
+    {
+        "question": "Da li postoji wi-fi u čitaonici?",
+        "answer": "Da, čitaonica ima besplatan wi-fi za studente. Podatke za pristup dobijaš na info-pultu.",
+        "keywords": ["wifi", "wi-fi", "internet", "mreza", "šifra za wifi", "sifra za wifi"]
+    },
+
+    # 7) Hrana i piće
+    {
+        "question": "Da li je dozvoljeno unošenje hrane i pića?",
+        "answer": "Dozvoljeno je unošenje vode u flaši, ali hrana i zaslađena pića nisu dozvoljeni u prostoru čitaonice.",
+        "keywords": ["hrana", "piće", "pice", "voda", "unos hrane", "da li smem da jedem"]
+    },
+
+    # 8) Pretraga knjiga
+    {
+        "question": "Kako da pronađem određenu knjigu?",
+        "answer": "Knjigu možeš pronaći preko online kataloga biblioteke ili uz pomoć osoblja na info-pultu.",
+        "keywords": ["pronađem knjigu", "nadjem knjigu", "katalog", "pretraga knjiga", "gde je knjiga"]
+    },
+
+    # 9) Pravila ponašanja
+    {
+        "question": "Koja su osnovna pravila ponašanja u čitaonici?",
+        "answer": "U čitaonici je obavezna tišina, telefoni na silent modu, a razgovor je dozvoljen samo u za to predviđenim zonama.",
+        "keywords": ["pravila ponasanja", "ponašanje", "tišina", "telefon", "pravila u čitaonici"]
+    },
+
+    # 10) Laptop i utičnice
+    {
+        "question": "Da li mogu da koristim laptop i da li ima utičnica?",
+        "answer": "Korišćenje laptopa je dozvoljeno, a većina stolova ima dostupne utičnice za napajanje.",
+        "keywords": ["laptop", "racunar", "kompjuter", "utičnica", "uticnice", "struja"]
+    },
+
+    # 11) Trajanje rezervacije
+    {
+        "question": "Koliko dugo važi rezervacija mesta?",
+        "answer": "Rezervacija važi 30 minuta od naznačenog početka, nakon čega se mesto može dodeliti drugom korisniku.",
+        "keywords": ["koliko dugo", "vazi rezervacija", "trajanje rezervacije", "koliko traje rezervacija"]
+    },
+
+    # 12) Kazne
+    {
+        "question": "Da li postoje kazne ako se ne poštuju pravila?",
+        "answer": "Za učestale prekršaje pravila moguće je privremeno uskraćivanje prava korišćenja čitaonice.",
+        "keywords": ["kazna", "kazne", "opomena", "prekrsaj", "prekršaj", "nepoštovanje pravila"]
+    },
+
+    # 13) Štampa i skener
+    {
+        "question": "Da li postoji mogućnost štampe ili skeniranja?",
+        "answer": "U sklopu čitaonice postoji multifunkcionalni uređaj za štampu i skeniranje, usluga je dostupna uz doplatu.",
+        "keywords": ["štampa", "stampanje", "štampanje", "skener", "skaniranje", "printanje"]
+    },
+
+    # 14) Rad praznicima
+    {
+        "question": "Da li čitaonica radi za vreme praznika?",
+        "answer": "Tokom državnih praznika čitaonica može raditi skraćeno ili biti zatvorena, raspored se objavljuje na sajtu i oglasnoj tabli.",
+        "keywords": ["praznik", "praznici", "radi praznicima", "radno vreme praznik", "da li radi za praznik"]
     }
 ]
+
 
 
 # ------------------------
