@@ -1,3 +1,4 @@
+// Prikaz predloženih pitanja u #suggestions
 function renderSuggestions(suggestions) {
     const container = document.getElementById("suggestions");
     container.innerHTML = "";
@@ -19,7 +20,6 @@ function renderSuggestions(suggestions) {
         container.appendChild(btn);
     });
 }
-
 
 async function sendMessage() {
     const input = document.getElementById("user-input");
@@ -70,8 +70,10 @@ async function sendMessage() {
         chat.appendChild(botMsg);
         chat.scrollTop = chat.scrollHeight;
 
-        //predlozena pitanja
-        renderSuggestions(data.suggestions);
+        // --- predložena pitanja ispod chata ---
+        if (data.suggestions) {
+            renderSuggestions(data.suggestions);
+        }
 
     } catch (err) {
         typingBubble.remove();

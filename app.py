@@ -4,7 +4,7 @@ import re
 app = Flask(__name__)
 
 # ------------------------
-# BAZA ZNANJA (osnovna verzija)
+# BAZA ZNANJA
 # ------------------------
 
 FAQ = [
@@ -101,14 +101,9 @@ FAQ = [
 ]
 
 
-
 # ------------------------
 # POMOĆNE FUNKCIJE
 # ------------------------
-def get_suggestions(limit=4):
-    """Vraća listu predloženih pitanja (naslova iz FAQ)."""
-    return [item["question"] for item in FAQ[:limit]]
-
 
 def normalize(text: str) -> str:
     """Normalizuje tekst: mala slova + uklanja specijalne znakove."""
@@ -149,6 +144,48 @@ def find_answer(user_message: str) -> str:
     return best_match["answer"]
 
 
+def suggest_questions(user_message: str, limit: int = 5):
+    """
+    Vraća listu sličnih pitanja na osnovu korisničkog unosa.
+    Gleda preklapanje ključnih reči i sortira po 'score'-u.
+    """
+    msg = normalize(user_message)
+    words = msg.split()
+
+    scored = []
+
+    for item in FAQ:
+        score = 0
+        for kw in item["keywords"]:
+            kw_norm = normalize(kw)
+
+            if kw_norm in msg:
+                score += 2
+
+            for w in kw_norm.split():
+                if w in words:
+                    score += 1
+
+        if score > 0:
+            scored.append((score, item["question"]))
+
+    # sort po score-u (veći prvi)
+    scored.sort(key=lambda x: x[0], reverse=True)
+
+    suggestions = []
+    for _, q in scored:
+        if q not in suggestions:
+            suggestions.append(q)
+        if len(suggestions) >= limit:
+            break
+
+    # ako nema ničeg sličnog, vrati par "default" pitanja
+    if not suggestions:
+        suggestions = [item["question"] for item in FAQ[:limit]]
+
+    return suggestions
+
+
 # ------------------------
 # RUTE
 # ------------------------
@@ -164,13 +201,12 @@ def api_message():
     user_message = data.get("message", "")
 
     reply = find_answer(user_message)
-    suggestions = get_suggestions()  # za sada uvek ista 3–4 pitanja
+    suggestions = suggest_questions(user_message)
 
     return jsonify({
         "answer": reply,
         "suggestions": suggestions
     })
-
 
 
 if __name__ == "__main__":
