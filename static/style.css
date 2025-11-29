@@ -32,7 +32,7 @@ h1 {
     gap: 6px;
 }
 
-/* zajednički stil poruke */
+/* poruke */
 .message {
     max-width: 70%;
     padding: 10px 14px;
@@ -41,7 +41,6 @@ h1 {
     line-height: 1.4;
 }
 
-/* korisnik desno, plavo */
 .message.user {
     margin-left: auto;
     background: #cfe3ff;
@@ -49,7 +48,6 @@ h1 {
     border-bottom-right-radius: 6px;
 }
 
-/* bot levo, sivo */
 .message.bot {
     margin-right: auto;
     background: #e6e7eb;
@@ -57,6 +55,7 @@ h1 {
     border-bottom-left-radius: 6px;
 }
 
+/* forma */
 form {
     display: flex;
     margin-top: 12px;
@@ -79,4 +78,46 @@ button {
     color: white;
     font-weight: 600;
     cursor: pointer;
+}
+
+/* ---------- TYPING MEHURIĆ ---------- */
+
+.typing {
+    align-self: flex-start;
+    max-width: 70%;
+    padding: 10px 14px;
+    background: #e6e7eb;
+    color: #555;
+    border-radius: 16px;
+    border-bottom-left-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.dots {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.dots span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #555;
+    border-radius: 50%;
+    animation: blink 1.4s infinite both;
+}
+
+.dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0% { opacity: .2; }
+    20% { opacity: 1; }
+    100% { opacity: .2; }
 }

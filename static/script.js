@@ -5,7 +5,7 @@ async function sendMessage() {
 
     if (!userText) return;
 
-    // poruka korisnika
+    // --- poruka korisnika ---
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
     userMsg.textContent = userText;
@@ -14,22 +14,47 @@ async function sendMessage() {
     input.value = "";
     chat.scrollTop = chat.scrollHeight;
 
-    // slanje poruke backendu
-    const response = await fetch("/api/message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText })
-    });
-
-    const data = await response.json();
-
-    // poruka bota
-    const botMsg = document.createElement("div");
-    botMsg.className = "message bot";
-    botMsg.textContent = data.answer;
-    chat.appendChild(botMsg);
-
+    // --- bot typing mehurić ---
+    const typingBubble = document.createElement("div");
+    typingBubble.className = "typing";
+    typingBubble.innerHTML = `
+        <span class="dots">
+            <span></span><span></span><span></span>
+        </span>
+    `;
+    chat.appendChild(typingBubble);
     chat.scrollTop = chat.scrollHeight;
+
+    try {
+        const response = await fetch("/api/message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userText })
+        });
+
+        const data = await response.json();
+
+        // mali delay da se vidi "kucanje"
+        await new Promise(resolve => setTimeout(resolve, 600));
+
+        // ukloni "bot kuca..."
+        typingBubble.remove();
+
+        // --- poruka bota ---
+        const botMsg = document.createElement("div");
+        botMsg.className = "message bot";
+        botMsg.textContent = data.answer;
+        chat.appendChild(botMsg);
+        chat.scrollTop = chat.scrollHeight;
+    } catch (err) {
+        typingBubble.remove();
+        const errorMsg = document.createElement("div");
+        errorMsg.className = "message bot";
+        errorMsg.textContent = "Došlo je do greške. Pokušaj ponovo kasnije.";
+        chat.appendChild(errorMsg);
+        chat.scrollTop = chat.scrollHeight;
+        console.error(err);
+    }
 }
 
 // submit forme
