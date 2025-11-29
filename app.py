@@ -3,9 +3,9 @@ import re
 
 app = Flask(__name__)
 
-# ------------------------
-# BAZA ZNANJA
-# ------------------------
+# ---------------------------------------
+#   BAZA ZNANJA
+# ---------------------------------------
 
 FAQ = [
     {
@@ -29,70 +29,60 @@ FAQ = [
         "keywords": ["knjige", "iznositi", "poneti", "iznosi", "pozajmica", "pozajmljivanje"]
     },
 
-    # 5) Učlanjenje
     {
         "question": "Kako da postanem član čitaonice?",
         "answer": "Član čitaonice možeš postati popunjavanjem pristupnice na info-pultu uz indeks ili ličnu kartu.",
         "keywords": ["uclanjenje", "učlanjenje", "postanem član", "postati clan", "pristupnica"]
     },
 
-    # 6) Wi-Fi
     {
         "question": "Da li postoji wi-fi u čitaonici?",
         "answer": "Da, čitaonica ima besplatan wi-fi za studente. Podatke za pristup dobijaš na info-pultu.",
         "keywords": ["wifi", "wi-fi", "internet", "mreza", "šifra za wifi", "sifra za wifi"]
     },
 
-    # 7) Hrana i piće
     {
         "question": "Da li je dozvoljeno unošenje hrane i pića?",
         "answer": "Dozvoljeno je unošenje vode u flaši, ali hrana i zaslađena pića nisu dozvoljeni u prostoru čitaonice.",
         "keywords": ["hrana", "piće", "pice", "voda", "unos hrane", "da li smem da jedem"]
     },
 
-    # 8) Pretraga knjiga
     {
         "question": "Kako da pronađem određenu knjigu?",
         "answer": "Knjigu možeš pronaći preko online kataloga biblioteke ili uz pomoć osoblja na info-pultu.",
         "keywords": ["pronađem knjigu", "nadjem knjigu", "katalog", "pretraga knjiga", "gde je knjiga"]
     },
 
-    # 9) Pravila ponašanja
     {
         "question": "Koja su osnovna pravila ponašanja u čitaonici?",
         "answer": "U čitaonici je obavezna tišina, telefoni na silent modu, a razgovor je dozvoljen samo u za to predviđenim zonama.",
         "keywords": ["pravila ponasanja", "ponašanje", "tišina", "telefon", "pravila u čitaonici"]
     },
 
-    # 10) Laptop i utičnice
     {
         "question": "Da li mogu da koristim laptop i da li ima utičnica?",
         "answer": "Korišćenje laptopa je dozvoljeno, a većina stolova ima dostupne utičnice za napajanje.",
         "keywords": ["laptop", "racunar", "kompjuter", "utičnica", "uticnice", "struja"]
     },
 
-    # 11) Trajanje rezervacije
     {
         "question": "Koliko dugo važi rezervacija mesta?",
         "answer": "Rezervacija važi 30 minuta od naznačenog početka, nakon čega se mesto može dodeliti drugom korisniku.",
         "keywords": ["koliko dugo", "vazi rezervacija", "trajanje rezervacije", "koliko traje rezervacija"]
     },
 
-    # 12) Kazne
     {
         "question": "Da li postoje kazne ako se ne poštuju pravila?",
         "answer": "Za učestale prekršaje pravila moguće je privremeno uskraćivanje prava korišćenja čitaonice.",
         "keywords": ["kazna", "kazne", "opomena", "prekrsaj", "prekršaj", "nepoštovanje pravila"]
     },
 
-    # 13) Štampa i skener
     {
         "question": "Da li postoji mogućnost štampe ili skeniranja?",
         "answer": "U sklopu čitaonice postoji multifunkcionalni uređaj za štampu i skeniranje, usluga je dostupna uz doplatu.",
         "keywords": ["štampa", "stampanje", "štampanje", "skener", "skaniranje", "printanje"]
     },
 
-    # 14) Rad praznicima
     {
         "question": "Da li čitaonica radi za vreme praznika?",
         "answer": "Tokom državnih praznika čitaonica može raditi skraćeno ili biti zatvorena, raspored se objavljuje na sajtu i oglasnoj tabli.",
@@ -101,21 +91,55 @@ FAQ = [
 ]
 
 
-# ------------------------
-# POMOĆNE FUNKCIJE
-# ------------------------
+# ---------------------------------------
+#   POMOĆNE FUNKCIJE
+# ---------------------------------------
 
 def normalize(text: str) -> str:
-    """Normalizuje tekst: mala slova + uklanja specijalne znakove."""
     text = text.lower()
     text = re.sub(r"[^\wšđčćž ]", " ", text)
     return text
 
 
 def find_answer(user_message: str) -> str:
-    """Pronalazi najbolji odgovor na osnovu ključnih reči/sintagmi."""
     msg = normalize(user_message)
     words = msg.split()
+
+    # -------------------------------
+    #   PREDEFINISANI ODGOVORI
+    # -------------------------------
+
+    # POZDRAVI
+    GREETINGS = ["cao", "ćao", "zdravo", "hej", "hello", "hi", "pozdrav"]
+    for g in GREETINGS:
+        if g in msg:
+            return "Ćao! Kako mogu da ti pomognem? 😊"
+
+    # HVALA
+    THANKS = ["hvala", "hvalaaa", "tnx", "thx"]
+    for t in THANKS:
+        if t in msg:
+            return "Nema na čemu! Tu sam ako ti još nešto treba 😊"
+
+    # OPROŠTAJ
+    GOODBYE = ["vidimo se", "idem", "odlazim", "laku noć", "laku noc"]
+    for bye in GOODBYE:
+        if bye in msg:
+            return "Vidimo se! 👋"
+
+    # KO SI TI?
+    if "ko si ti" in msg or ("ko" in msg and "ti" in msg):
+        return "Ja sam chatbot čitaonice! Tu sam da ti pomognem oko svih informacija o čitaonici 😊"
+
+    # UVREDE (kulturna reakcija)
+    BAD_WORDS = ["glup", "budala", "idiot", "debil", "smotan", "retard"]
+    for bad in BAD_WORDS:
+        if bad in msg:
+            return "Molim te da budemo fini 😊"
+
+    # -------------------------------
+    #   FAQ - pametno prepoznavanje
+    # -------------------------------
 
     best_match = None
     best_score = 0
@@ -125,11 +149,11 @@ def find_answer(user_message: str) -> str:
         for kw in item["keywords"]:
             kw_norm = normalize(kw)
 
-            # 1) cela fraza u poruci -> veći score
+            # fraza u poruci
             if kw_norm in msg:
                 score += 2
 
-            # 2) pojedinačne reči iz fraze -> manji score
+            # pojedinačne reči
             for w in kw_norm.split():
                 if w in words:
                     score += 1
@@ -139,19 +163,14 @@ def find_answer(user_message: str) -> str:
             best_match = item
 
     if best_score == 0 or best_match is None:
-        return "Trenutno nemam odgovor na ovo pitanje. Pokušaj da pitaš drugačije 🙂."
+        return "Trenutno nemam odgovor na ovo pitanje. Pokušaj da pitaš malo drugačije 🙂."
 
     return best_match["answer"]
 
 
 def suggest_questions(user_message: str, limit: int = 5):
-    """
-    Vraća listu sličnih pitanja na osnovu korisničkog unosa.
-    Gleda preklapanje ključnih reči i sortira po 'score'-u.
-    """
     msg = normalize(user_message)
     words = msg.split()
-
     scored = []
 
     for item in FAQ:
@@ -169,7 +188,6 @@ def suggest_questions(user_message: str, limit: int = 5):
         if score > 0:
             scored.append((score, item["question"]))
 
-    # sort po score-u (veći prvi)
     scored.sort(key=lambda x: x[0], reverse=True)
 
     suggestions = []
@@ -179,16 +197,15 @@ def suggest_questions(user_message: str, limit: int = 5):
         if len(suggestions) >= limit:
             break
 
-    # ako nema ničeg sličnog, vrati par "default" pitanja
     if not suggestions:
         suggestions = [item["question"] for item in FAQ[:limit]]
 
     return suggestions
 
 
-# ------------------------
-# RUTE
-# ------------------------
+# ---------------------------------------
+#   ROUTES
+# ---------------------------------------
 
 @app.route("/")
 def home():
