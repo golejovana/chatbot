@@ -1,4 +1,6 @@
+// ----------------------------------------
 // Prikaz predloženih pitanja u #suggestions
+// ----------------------------------------
 function renderSuggestions(suggestions) {
     const container = document.getElementById("suggestions");
     container.innerHTML = "";
@@ -21,6 +23,9 @@ function renderSuggestions(suggestions) {
     });
 }
 
+// ----------------------------------------
+// SLANJE PORUKE BOTU
+// ----------------------------------------
 async function sendMessage() {
     const input = document.getElementById("user-input");
     const chat = document.getElementById("chat-window");
@@ -49,18 +54,20 @@ async function sendMessage() {
     chat.scrollTop = chat.scrollHeight;
 
     try {
+        // 🔥 OBAVEZNO ZA SLANJE SESSION COOKIEJA
         const response = await fetch("/api/message", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",   // 🔥 KLJUČNO
             body: JSON.stringify({ message: userText })
         });
 
         const data = await response.json();
 
-        // mali delay da se vidi "kucanje"
+        // mali delay radi animacije
         await new Promise(resolve => setTimeout(resolve, 600));
 
-        // ukloni "bot kuca..."
+        // ukloni bubble
         typingBubble.remove();
 
         // --- poruka bota ---
@@ -70,29 +77,35 @@ async function sendMessage() {
         chat.appendChild(botMsg);
         chat.scrollTop = chat.scrollHeight;
 
-        // --- predložena pitanja ispod chata ---
+        // --- predložena pitanja ---
         if (data.suggestions) {
             renderSuggestions(data.suggestions);
         }
 
     } catch (err) {
         typingBubble.remove();
+
         const errorMsg = document.createElement("div");
         errorMsg.className = "message bot";
         errorMsg.textContent = "Došlo je do greške. Pokušaj ponovo kasnije.";
         chat.appendChild(errorMsg);
         chat.scrollTop = chat.scrollHeight;
+
         console.error(err);
     }
 }
 
+// ----------------------------------------
 // submit forme
+// ----------------------------------------
 document.getElementById("chat-form").addEventListener("submit", function (e) {
     e.preventDefault();
     sendMessage();
 });
 
+// ----------------------------------------
 // Enter u input polju
+// ----------------------------------------
 document.getElementById("user-input").addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
         e.preventDefault();

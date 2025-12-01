@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/static/login.css">
 </head>
 <body>
-<!-- {% include "navbar.html" %} -->
+
 <div class="auth-card">
     <h2>Prijava</h2>
 
@@ -28,6 +28,7 @@ async function login() {
     const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",   // 🔥 KLJUČNO!!!
         body: JSON.stringify({ email, password })
     });
 
@@ -38,7 +39,7 @@ async function login() {
 
     if (data.success) {
         msg.style.color = "green";
-        setTimeout(() => window.location.href = "/", 1100);
+        setTimeout(() => window.location.href = "/", 1000);
     } else {
         msg.style.color = "red";
     }

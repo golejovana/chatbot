@@ -1,29 +1,17 @@
 from flask import Blueprint, request, jsonify, session
-from db import cursor, db
 from routes.auth import login_required
+from models.reservation_model import reserve_seat
 
 reservations_bp = Blueprint("reservations_bp", __name__)
 
-@reservations_bp.route("/reserve", methods=["POST"])
+@reservations_bp.route("/reserve-seat", methods=["POST"])
 @login_required
-def reserve():
+def reserve_seat_route():
     user_id = session["user_id"]
     data = request.get_json()
-    date = data.get("date")
+    seat_number = data.get("seat_number")
 
-    cursor.execute(
-        "INSERT INTO reservations (user_id, date) VALUES (%s, %s)",
-        (user_id, date)
-    )
-    db.commit()
+    success, message = reserve_seat(user_id, seat_number)
 
-    return jsonify({"success": True, "message": "Rezervacija kreirana!"})
+    return jsonify({"success": success, "message": message})
 
-
-@reservations_bp.route("/my-reservations")
-@login_required
-def my_reservations():
-    user_id = session["user_id"]
-    cursor.execute("SELECT * FROM reservations WHERE user_id = %s", (user_id,))
-    result = cursor.fetchall()
-    return jsonify(result)

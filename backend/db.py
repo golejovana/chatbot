@@ -8,3 +8,10 @@ db = mysql.connector.connect(
 )
 
 cursor = db.cursor(dictionary=True)
+def get_db_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="root",
+        database="citaonica"
+    )
